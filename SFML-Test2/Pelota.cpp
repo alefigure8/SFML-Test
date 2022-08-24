@@ -5,13 +5,14 @@ Pelota::Pelota()
 {
     _shape.setFillColor(sf::Color::Magenta);
     _shape.setRadius(20.0f);
-    _shape.setPosition(200.0f, 200.0f);
+    _shape.setPosition(350.0f, 200.0f);
 	_state = STATE::IDLE;
 	_speed_jump = 0.0f;
 }
 
 void Pelota::cmd()
 {
+     _move.x = _move.y = 0;
 
     if (_state == Pelota::IDLE)
     {
@@ -43,20 +44,22 @@ void Pelota::update()
         //Personaje quieto. Respiración.
         break;
     case Pelota::WALK_FRONT:
-        move(5, 0);
+        _move.x = 5;
         _state = STATE::IDLE;
         break;
     case Pelota::WALK_BACK:
-        move(-3, 0);
+        _move.x = -4;
         _state = STATE::IDLE;
         break;
     case Pelota::JUMP:
+        _state = STATE::IDLE;
         break;
     }
 	
 	//GRAVITY
     _speed_jump -= 1.0f; 
-    move(0, -_speed_jump);
+    _move.y -= _speed_jump;
+    move(_move.x, _move.y);
 }
 
 sf::CircleShape& Pelota::getDraw()

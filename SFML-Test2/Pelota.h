@@ -16,6 +16,7 @@ private:
 	float _speed_jump;
 	char _keyRelease;
 	sf::Vector2f _last_position;
+	sf::Vector2f _move;
 public:
 	Pelota();
 	void cmd();

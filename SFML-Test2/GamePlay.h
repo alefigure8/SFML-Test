@@ -2,6 +2,8 @@
 #include <SFML/Graphics.hpp>
 #include "Pelota.h"
 #include "Obstacle.h"
+#include "ObstacleRed.h"
+
 
 class GamePlay
 {
@@ -16,6 +18,7 @@ private:
 	
 	Pelota p;
 	Obstacle o;
+	ObstacleRed o2;
 	bool _pause;
 	STATE_GAME _state;
 public:

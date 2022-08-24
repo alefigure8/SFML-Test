@@ -1,8 +1,13 @@
 #include "Obstacle.h"
 
+sf::RectangleShape& Obstacle::getShape()
+{
+	return _shape;
+}
+
 Obstacle::Obstacle()
 {
-	_shape.setPosition(350, 320);
+	_shape.setPosition(350, 450);
 	_shape.setSize({ 100, 30 });
 }
 

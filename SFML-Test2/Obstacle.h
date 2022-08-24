@@ -5,7 +5,8 @@ class Obstacle
 {
 private:
 	sf::RectangleShape _shape;
-	
+protected:
+	sf::RectangleShape& getShape();
 public:
 	Obstacle();
 	void cmd();

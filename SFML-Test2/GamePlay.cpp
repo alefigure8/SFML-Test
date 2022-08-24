@@ -13,6 +13,7 @@ void GamePlay::cmd()
 	{
 		p.cmd(); //Pelota
 		o.cmd(); //Obstaculo
+		o2.cmd(); //Obstaculo
 		
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 		{
@@ -44,6 +45,7 @@ void GamePlay::update()
 		
 		//Obstaculo
 		o.update();
+		o2.update();
 
 		//Colisiones
 		collider();
@@ -54,14 +56,50 @@ void GamePlay::draw(sf::RenderWindow& window)
 {
 	window.draw(p.getDraw()); //Pelota
 	window.draw(o.getDraw()); //Obstaculo
+	window.draw(o2.getDraw()); //Obstaculo
 }
 
 void GamePlay::collider()
 {
+		
 	if (p.getLastPosition().y + p.getDraw().getGlobalBounds().height <= o.getDraw().getGlobalBounds().top 
-		&& p.getDraw().getGlobalBounds().intersects(o.getDraw().getGlobalBounds()) 
-		&& p.getSpeed() < 0)
+		&& p.getDraw().getGlobalBounds().intersects(o.getDraw().getGlobalBounds())
+		&& p.getSpeed() < 0) // Arriba
 	{
 		p.setFloor(p.getDraw().getPosition().x, o.getDraw().getGlobalBounds().top - p.getDraw().getGlobalBounds().height);
 	}
+
+	if (p.getDraw().getGlobalBounds().intersects(o.getDraw().getGlobalBounds()))
+	{
+		if (p.getLastPosition().x < p.getDraw().getPosition().x) // izquierda
+		{
+			p.setFloor(o.getDraw().getGlobalBounds().left - p.getDraw().getGlobalBounds().width, p.getDraw().getPosition().y);
+		}
+		else if (p.getLastPosition().x > p.getDraw().getPosition().x) // derecha
+		{
+			p.setFloor(o.getDraw().getGlobalBounds().left + o.getDraw().getGlobalBounds().width, p.getDraw().getPosition().y);
+		}
+	
+	}
+
+	if (p.getLastPosition().y + p.getDraw().getGlobalBounds().height <= o2.getDraw().getGlobalBounds().top
+		&& p.getDraw().getGlobalBounds().intersects(o2.getDraw().getGlobalBounds())
+		&& p.getSpeed() < 0) // Arriba
+	{
+		p.setFloor(p.getDraw().getPosition().x, o2.getDraw().getGlobalBounds().top - p.getDraw().getGlobalBounds().height);
+	}
+
+	if (p.getDraw().getGlobalBounds().intersects(o2.getDraw().getGlobalBounds()))
+	{
+		if (p.getLastPosition().x < p.getDraw().getPosition().x) // izquierda
+		{
+			p.setFloor(o2.getDraw().getGlobalBounds().left - p.getDraw().getGlobalBounds().width, p.getDraw().getPosition().y);
+		}
+		else if (p.getLastPosition().x > p.getDraw().getPosition().x) // derecha
+		{
+			p.setFloor(o2.getDraw().getGlobalBounds().left + o2.getDraw().getGlobalBounds().width, p.getDraw().getPosition().y);
+		}
+
+	}
+	
 }
