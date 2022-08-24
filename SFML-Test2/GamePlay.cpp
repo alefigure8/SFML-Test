@@ -42,7 +42,7 @@ void GamePlay::update()
 		if (p.getDraw().getPosition().y > 500) { // SUELO = 500
 			p.setFloor(p.getDraw().getPosition().x, 500);
 		}
-		
+
 		//Obstaculo
 		o.update();
 		o2.update();
@@ -74,10 +74,12 @@ void GamePlay::collider()
 		if (p.getLastPosition().x < p.getDraw().getPosition().x) // izquierda
 		{
 			p.setFloor(o.getDraw().getGlobalBounds().left - p.getDraw().getGlobalBounds().width, p.getDraw().getPosition().y);
+			p.setState(true);
 		}
 		else if (p.getLastPosition().x > p.getDraw().getPosition().x) // derecha
 		{
 			p.setFloor(o.getDraw().getGlobalBounds().left + o.getDraw().getGlobalBounds().width, p.getDraw().getPosition().y);
+			p.setState(true);
 		}
 	
 	}
