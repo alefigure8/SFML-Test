@@ -74,12 +74,10 @@ void GamePlay::collider()
 		if (p.getLastPosition().x < p.getDraw().getPosition().x) // izquierda
 		{
 			p.setFloor(o.getDraw().getGlobalBounds().left - p.getDraw().getGlobalBounds().width, p.getDraw().getPosition().y);
-			p.setState(true);
 		}
 		else if (p.getLastPosition().x > p.getDraw().getPosition().x) // derecha
 		{
 			p.setFloor(o.getDraw().getGlobalBounds().left + o.getDraw().getGlobalBounds().width, p.getDraw().getPosition().y);
-			p.setState(true);
 		}
 	
 	}
