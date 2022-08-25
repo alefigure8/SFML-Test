@@ -20,6 +20,8 @@ private:
 	char _keyRelease;
 	sf::Vector2f _last_position;
 	sf::Vector2f _move;
+	char last_key;
+	float buffer_speed;
 public:
 	Pelota();
 	void cmd();

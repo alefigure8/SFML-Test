@@ -21,13 +21,16 @@ void Pelota::cmd()
         {
             _state = STATE::WALK_FRONT;
             _speed_forward = 5.0f;
-            std::cout << "press D" << std::endl;
+            last_key = 'D';
+
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
             {
                 _state = STATE::JUMP;
+                _speed_jump = 15.0f;
                 _speed_forward = 12.0f;
-                std::cout << "press W" << std::endl;
+                buffer_speed = 0.0f;
+                last_key = 'D';
 
             }
         }
@@ -36,25 +39,57 @@ void Pelota::cmd()
         {
             _state = STATE::WALK_BACK;
             _speed_backward = -5.0f;
-            std::cout << "press A" << std::endl;
+            last_key = 'A';
+
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
             {
                 _state = STATE::JUMP;
+                _speed_jump = 15.0f;
                 _speed_backward = -12.0f;
-                std::cout << "press W" << std::endl;
-
+                buffer_speed = 0.0f;
+                last_key = 'A';
             }
-			
+
         }
 
         if (sf::Keyboard::isKeyPressed(sf::Keyboard::W))
         {
-            _state = STATE::JUMP;
-            _speed_jump = 15.0f;
-            std::cout << "press W" << std::endl;
+            buffer_speed += 0.5f;
+            std::cout << buffer_speed << std::endl;
+            last_key = 'W';
         }
+
+        if (last_key == 'W' && !sf::Keyboard::isKeyPressed(sf::Keyboard::W))
+        {
+            _state = STATE::JUMP;
+			
+            if (buffer_speed < 20.0f && buffer_speed > 2.0f) {
+				
+                if (buffer_speed < 10.0f) {
+                    _speed_jump = 15.0f;
+					
+                }
+                else
+                {
+			        _speed_jump = buffer_speed;
+                }
+            }
+            else if (buffer_speed < 2.0f)
+            {
+                buffer_speed = 0;
+            }
+            else
+            {
+				_speed_jump = 20.0f;
+            }
+			
+			buffer_speed = 0.0f;
+            last_key = 'D';
+        }
+
     }
+ 
 
 }
 
@@ -106,6 +141,10 @@ void Pelota::setFloor(float x, float y)
 {
     _state = STATE::IDLE;
     _speed_jump = 0;
+	_speed_backward = 0;
+	_speed_forward = 0;
+	_move.x = 0;
+	_move.y = 0;
 	_shape.setPosition(x, y);
 }
 
