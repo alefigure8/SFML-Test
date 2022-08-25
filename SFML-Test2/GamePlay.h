@@ -17,8 +17,8 @@ private:
 	};
 	
 	Pelota p;
-	Obstacle o;
-	ObstacleRed o2;
+	Obstacle* o[5];
+	
 	bool _pause;
 	STATE_GAME _state;
 public:

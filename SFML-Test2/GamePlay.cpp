@@ -1,10 +1,33 @@
 #include "GamePlay.h"
 #include <iostream>
+#include <ctime>
 
 GamePlay::GamePlay()
 {
+	srand(time(NULL));
+	
 	_state = STATE_GAME::PLAY;
 	_pause = false;
+
+	for (size_t i = 0; i < 5; i++)
+	{
+		switch (rand() % 2)
+		{
+		case 0:
+			o[i] = new Obstacle;
+			break;
+		case 1:
+			o[i] = new ObstacleRed;
+			break;
+		}
+	}
+	
+	for (auto obs : o)
+	{	
+		float x = rand() % 500 + 1;
+		float y = rand() % 500 + 1;
+		obs->setShape(x, y);
+	}
 }
 
 void GamePlay::cmd()
@@ -12,8 +35,14 @@ void GamePlay::cmd()
 	if(!_pause)
 	{
 		p.cmd(); //Pelota
-		o.cmd(); //Obstaculo
-		o2.cmd(); //Obstaculo
+		
+		// Obstacle
+		for (auto obs : o)
+		{
+			obs -> cmd();
+		}
+
+
 		
 		if (sf::Keyboard::isKeyPressed(sf::Keyboard::Space))
 		{
@@ -44,8 +73,10 @@ void GamePlay::update()
 		}
 
 		//Obstaculo
-		o.update();
-		o2.update();
+		for (auto obs : o) 
+		{
+			obs -> update();
+		}
 
 		//Colisiones
 		collider();
@@ -55,51 +86,37 @@ void GamePlay::update()
 void GamePlay::draw(sf::RenderWindow& window)
 {
 	window.draw(p.getDraw()); //Pelota
-	window.draw(o.getDraw()); //Obstaculo
-	window.draw(o2.getDraw()); //Obstaculo
+	
+	for (auto obs : o)
+	{
+		window.draw(obs -> getDraw());
+	}
+
 }
 
 void GamePlay::collider()
 {
+	for (auto obs : o)
+	{
+
+		if (p.getLastPosition().y + p.getDraw().getGlobalBounds().height <= obs -> getDraw().getGlobalBounds().top
+			&& p.getDraw().getGlobalBounds().intersects(obs -> getDraw().getGlobalBounds())
+			&& p.getSpeed() < 0) // Arriba
+		{
+			p.setFloor(p.getDraw().getPosition().x, obs -> getDraw().getGlobalBounds().top - p.getDraw().getGlobalBounds().height);
+		}
+
+		if (p.getDraw().getGlobalBounds().intersects(obs -> getDraw().getGlobalBounds()))
+		{
+			if (p.getLastPosition().x < p.getDraw().getPosition().x) // izquierda
+			{
+				p.setFloor(obs -> getDraw().getGlobalBounds().left - p.getDraw().getGlobalBounds().width, p.getDraw().getPosition().y);
+			}
+			else if (p.getLastPosition().x > p.getDraw().getPosition().x) // derecha
+			{
+				p.setFloor(obs -> getDraw().getGlobalBounds().left + obs -> getDraw().getGlobalBounds().width, p.getDraw().getPosition().y);
+			}
+		}
 		
-	if (p.getLastPosition().y + p.getDraw().getGlobalBounds().height <= o.getDraw().getGlobalBounds().top 
-		&& p.getDraw().getGlobalBounds().intersects(o.getDraw().getGlobalBounds())
-		&& p.getSpeed() < 0) // Arriba
-	{
-		p.setFloor(p.getDraw().getPosition().x, o.getDraw().getGlobalBounds().top - p.getDraw().getGlobalBounds().height);
 	}
-
-	if (p.getDraw().getGlobalBounds().intersects(o.getDraw().getGlobalBounds()))
-	{
-		if (p.getLastPosition().x < p.getDraw().getPosition().x) // izquierda
-		{
-			p.setFloor(o.getDraw().getGlobalBounds().left - p.getDraw().getGlobalBounds().width, p.getDraw().getPosition().y);
-		}
-		else if (p.getLastPosition().x > p.getDraw().getPosition().x) // derecha
-		{
-			p.setFloor(o.getDraw().getGlobalBounds().left + o.getDraw().getGlobalBounds().width, p.getDraw().getPosition().y);
-		}
-	
-	}
-
-	if (p.getLastPosition().y + p.getDraw().getGlobalBounds().height <= o2.getDraw().getGlobalBounds().top
-		&& p.getDraw().getGlobalBounds().intersects(o2.getDraw().getGlobalBounds())
-		&& p.getSpeed() < 0) // Arriba
-	{
-		p.setFloor(p.getDraw().getPosition().x, o2.getDraw().getGlobalBounds().top - p.getDraw().getGlobalBounds().height);
-	}
-
-	if (p.getDraw().getGlobalBounds().intersects(o2.getDraw().getGlobalBounds()))
-	{
-		if (p.getLastPosition().x < p.getDraw().getPosition().x) // izquierda
-		{
-			p.setFloor(o2.getDraw().getGlobalBounds().left - p.getDraw().getGlobalBounds().width, p.getDraw().getPosition().y);
-		}
-		else if (p.getLastPosition().x > p.getDraw().getPosition().x) // derecha
-		{
-			p.setFloor(o2.getDraw().getGlobalBounds().left + o2.getDraw().getGlobalBounds().width, p.getDraw().getPosition().y);
-		}
-
-	}
-	
 }
